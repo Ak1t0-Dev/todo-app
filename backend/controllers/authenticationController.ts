@@ -1,15 +1,17 @@
 import { Request, Response } from "express";
-const users = require("../models/users");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
-const { hashPassword } = require("../helpers/userHelper");
+import jwt, { Secret } from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import hashPassword from "../helpers/useHelper";
+import { usersModel } from "../models/users";
+import dotenv from "dotenv";
+dotenv.config();
 
 interface User {
   username: string;
   password: string;
 }
 
-const registerUser = async (req: Request, res: Response) => {
+export const registerUser = async (req: Request, res: Response) => {
   const { username, password } = req.body;
   const hashedPassword = await hashPassword(password);
   try {
@@ -17,7 +19,7 @@ const registerUser = async (req: Request, res: Response) => {
       username: username,
       password: hashedPassword,
     };
-    const createUser = await users.usersModel.create(userObject);
+    const createUser = await usersModel.create(userObject);
     res.json(createUser);
   } catch (error: any) {
     res.json({
@@ -27,18 +29,16 @@ const registerUser = async (req: Request, res: Response) => {
   }
 };
 
-const loginUser = async (req: Request, res: Response) => {
+export const loginUser = async (req: Request, res: Response) => {
   const { username, password } = req.body;
   try {
-    const user = await users.usersModel.findOne({ username }).lean();
+    const user = await usersModel.findOne({ username }).lean();
     if (!user) {
       res.json({
         error: true,
         message: "A user is not found!",
       });
-    }
-
-    if (await bcrypt.compare(password, user.password)) {
+    } else if (await bcrypt.compare(password, user.password)) {
       const accessToken = generateAccessToken(user);
       res.json({ accessToken: accessToken });
     }
@@ -53,7 +53,5 @@ const loginUser = async (req: Request, res: Response) => {
 };
 
 const generateAccessToken = (user: User) => {
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "2h" });
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET!, { expiresIn: "2h" });
 };
-
-module.exports = { registerUser, loginUser };
