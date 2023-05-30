@@ -13,8 +13,7 @@ export const AuthContainer: FC<AuthContainerProps> = ({ children }) => {
       <Container
         sx={{
           bgcolor: "#cfe8fc",
-          height: "60vh",
-          width: "500px",
+          width: "100%",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",

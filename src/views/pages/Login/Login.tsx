@@ -5,11 +5,13 @@ import styled from "styled-components";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import { SyntheticEvent } from "react";
+import { useNavigate } from "react-router-dom";
 // import dotenv from "dotenv";
 
 // dotenv.config();
 
 export const Login = () => {
+  const navigate = useNavigate();
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
     const data = { username: "John", password: "John1234" };
@@ -18,6 +20,7 @@ export const Login = () => {
       .post("http://localhost:3001/api/auth/login", data)
       .then(() => {
         console.log(url);
+        navigate("/home");
       })
       .catch((err) => {
         console.error("err:", err);

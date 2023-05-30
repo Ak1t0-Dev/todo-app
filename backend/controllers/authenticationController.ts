@@ -1,10 +1,18 @@
 import { Request, Response } from "express";
-import jwt, { Secret } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import hashPassword from "../helpers/useHelper";
 import { usersModel } from "../models/users";
 import dotenv from "dotenv";
 dotenv.config();
+
+// interface RegisterUser {
+//   username: string;
+//   password: string;
+//   firstname: string;
+//   lastname: string;
+//   address: string;
+// }
 
 interface User {
   username: string;
@@ -12,12 +20,15 @@ interface User {
 }
 
 export const registerUser = async (req: Request, res: Response) => {
-  const { username, password } = req.body;
+  const { username, password, firstname, lastname, address } = req.body;
   const hashedPassword = await hashPassword(password);
   try {
     const userObject = {
       username: username,
       password: hashedPassword,
+      firstname: firstname,
+      lastname: lastname,
+      address: address,
     };
     const createUser = await usersModel.create(userObject);
     res.json(createUser);

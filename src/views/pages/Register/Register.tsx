@@ -12,7 +12,13 @@ import { SyntheticEvent } from "react";
 export const Register = () => {
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
-    const data = { username: "Alex", password: "Alex1234" };
+    const data = {
+      username: "Alex",
+      password: "Alex1234",
+      firstname: "Alex1234",
+      lastname: "Alex1234",
+      address: "Alex1234",
+    };
     // console.log(process.env.BACKEND_URI! + "/api/auth/login");
     const url = axios
       .post("http://localhost:3001/api/auth/register", data)
@@ -36,8 +42,15 @@ export const Register = () => {
           autoComplete="off"
           onSubmit={handleSubmit}
         >
+          <TextField
+            id="outlined-basic"
+            label="First Name"
+            variant="outlined"
+          />
+          <TextField id="outlined-basic" label="Last Name" variant="outlined" />
           <TextField id="outlined-basic" label="Email" variant="outlined" />
           <TextField id="outlined-basic" label="Password" variant="outlined" />
+          <TextField id="outlined-basic" label="Address" variant="outlined" />
           <Button variant="outlined" type="submit" sx={{ width: "400px" }}>
             REGISTER
           </Button>
