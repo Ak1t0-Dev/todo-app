@@ -18,6 +18,7 @@ export const AuthContainer: FC<AuthContainerProps> = ({ children }) => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          background: "linear-gradient(rgb(236 236 236), rgb(146 146 146))",
         }}
       >
         {children}

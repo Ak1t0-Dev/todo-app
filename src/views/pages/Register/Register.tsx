@@ -9,13 +9,13 @@ import { SyntheticEvent } from "react";
 
 // dotenv.config();
 
-export const Login = () => {
+export const Register = () => {
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
-    const data = { username: "John", password: "John1234" };
+    const data = { username: "Alex", password: "Alex1234" };
     // console.log(process.env.BACKEND_URI! + "/api/auth/login");
     const url = axios
-      .post("http://localhost:3001/api/auth/login", data)
+      .post("http://localhost:3001/api/auth/register", data)
       .then(() => {
         console.log(url);
       })
@@ -26,7 +26,7 @@ export const Login = () => {
   return (
     <>
       <AuthContainer>
-        <Title>LOGIN</Title>
+        <Title>REGISTER</Title>
         <Box
           component="form"
           sx={{
@@ -39,7 +39,7 @@ export const Login = () => {
           <TextField id="outlined-basic" label="Email" variant="outlined" />
           <TextField id="outlined-basic" label="Password" variant="outlined" />
           <Button variant="outlined" type="submit" sx={{ width: "400px" }}>
-            LOGIN
+            REGISTER
           </Button>
         </Box>
       </AuthContainer>
