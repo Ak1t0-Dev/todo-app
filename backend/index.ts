@@ -4,6 +4,7 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import authenticationRoute from "./routes/authenticationRoutes";
+import cors from "cors";
 
 dotenv.config({ path: path.resolve(__dirname, ".", ".env") });
 
@@ -12,6 +13,7 @@ const port = process.env.PORT || 4000;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cors());
 
 mongoose.connect(`${process.env.MONGO_URI}`);
 const db = mongoose.connection;
