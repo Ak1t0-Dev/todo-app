@@ -2,6 +2,15 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { ObjectId } from "mongoose";
 
+interface User {
+  username: string;
+  password: string;
+  firstname: string;
+  lastname: string;
+  address: string;
+  post: Post[];
+}
+
 interface Post {
   id: ObjectId;
   title: string;
@@ -20,20 +29,22 @@ interface Tag {
 }
 
 export const Home = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<User[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [tags, setTags] = useState<Tag[]>([]);
 
   useEffect(() => {
     getCategories();
     getTags();
+    getPosts();
   }, []);
 
   const getPosts = () => {
     axios
-      .get("http://localhost:3001/api/posts")
+      .get("http://localhost:3001/api/userposts")
       .then((response) => {
         const data = response.data;
+        console.log(data);
         setPosts(data);
       })
       .catch((err) => {

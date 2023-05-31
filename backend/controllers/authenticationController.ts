@@ -2,17 +2,9 @@ import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import hashPassword from "../helpers/useHelper";
-import { usersModel } from "../models/users";
+import Users from "../models/users";
 import dotenv from "dotenv";
 dotenv.config();
-
-// interface RegisterUser {
-//   username: string;
-//   password: string;
-//   firstname: string;
-//   lastname: string;
-//   address: string;
-// }
 
 interface User {
   username: string;
@@ -30,7 +22,7 @@ export const registerUser = async (req: Request, res: Response) => {
       lastname: lastname,
       address: address,
     };
-    const createUser = await usersModel.create(userObject);
+    const createUser = await Users.create(userObject);
     res.json(createUser);
   } catch (error: any) {
     res.json({
@@ -43,7 +35,7 @@ export const registerUser = async (req: Request, res: Response) => {
 export const loginUser = async (req: Request, res: Response) => {
   const { username, password } = req.body;
   try {
-    const user = await usersModel.findOne({ username }).lean();
+    const user = await Users.findOne({ username }).lean();
     if (!user) {
       res.json({
         error: true,

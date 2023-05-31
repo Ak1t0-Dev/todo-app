@@ -1,26 +1,25 @@
-import mongoose from "mongoose";
+import { Schema, model } from "mongoose";
+import { ObjectId } from "mongodb";
 
-const postsSchema = new mongoose.Schema({
+const postsSchema = new Schema({
   title: {
     type: String,
     required: true,
   },
-  users: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "users",
-  },
   tags: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "tags",
+      type: ObjectId,
+      ref: "Tags",
     },
   ],
   categories: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "categories",
+      type: ObjectId,
+      ref: "Categories",
     },
   ],
 });
 
-export const postsModel = mongoose.model("posts", postsSchema);
+const Posts = model("Posts", postsSchema);
+
+export default Posts;

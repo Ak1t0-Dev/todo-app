@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
+import { Schema, model } from "mongoose";
 import { ObjectId } from "mongodb";
 
-export const usersSchema = new mongoose.Schema({
+const usersSchema = new Schema({
   username: {
     type: String,
     required: true,
@@ -25,9 +25,10 @@ export const usersSchema = new mongoose.Schema({
   posts: [
     {
       type: ObjectId,
-      ref: "posts",
+      ref: "Posts",
     },
   ],
 });
 
-export const usersModel = mongoose.model("users", usersSchema);
+const Users = model("Users", usersSchema);
+export default Users;

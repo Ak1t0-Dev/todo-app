@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { tagsModel } from "../models/tags";
+import Tags from "../models/tags";
 
 export const getTags = async (req: Request, res: Response) => {
-  const tagsList = await tagsModel.find();
+  const tagsList = await Tags.find();
   res.json(tagsList);
 };

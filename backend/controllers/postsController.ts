@@ -1,9 +1,8 @@
 import { Request, Response } from "express";
-import { postsModel } from "../models/posts";
+import Posts from "../models/posts";
 
 export const getPosts = async (req: Request, res: Response) => {
-  const postsList = await postsModel
-    .find()
+  const postsList = await Posts.find()
     .populate("users")
     .populate("tags")
     .populate("categories");
@@ -11,8 +10,7 @@ export const getPosts = async (req: Request, res: Response) => {
 };
 
 export const getIndividualPosts = async (req: Request, res: Response) => {
-  const individualPosts = await postsModel
-    .findById(req.params.id)
+  const individualPosts = await Posts.findById(req.params.id)
     .populate("users")
     .populate("tags")
     .populate("categories");
@@ -20,8 +18,7 @@ export const getIndividualPosts = async (req: Request, res: Response) => {
 };
 
 export const getPostedBy = async (req: Request, res: Response) => {
-  const postedBy = await postsModel
-    .find()
+  const postedBy = await Posts.find()
     .populate("users")
     .populate("tags")
     .populate("categories");
