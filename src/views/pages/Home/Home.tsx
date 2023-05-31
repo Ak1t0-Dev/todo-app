@@ -1,38 +1,15 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { ObjectId } from "mongoose";
 import styled from "styled-components";
-
-// interface User {
-//   username: string;
-//   password: string;
-//   firstname: string;
-//   lastname: string;
-//   address: string;
-//   post: Post[];
-// }
-
-interface Post {
-  _id: ObjectId;
-  title: string;
-  categories: Category[];
-  tags: Tag[];
-}
-
-interface Category {
-  _id: ObjectId;
-  category: string;
-}
-
-interface Tag {
-  _id: ObjectId;
-  tag: string;
-}
+import { useNavigate } from "react-router-dom";
+import { Category, Post, Tag } from "../../../types";
 
 export const Home = () => {
-  const [userPosts, setUserPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<Post[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [tags, setTags] = useState<Tag[]>([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     getCategories();
@@ -45,7 +22,7 @@ export const Home = () => {
       .get("http://localhost:3001/api/userposts")
       .then((response) => {
         const data = response.data;
-        setUserPosts(data);
+        setPosts(data);
       })
       .catch((err) => {
         console.error("err:", err);
@@ -76,9 +53,9 @@ export const Home = () => {
       });
   };
 
-  console.log("tags", tags);
-  console.log("categories", categories);
-  console.log("userPosts", userPosts);
+  const handleClick = (id: string) => {
+    navigate(`/post/${id}`);
+  };
 
   return (
     <Main>
@@ -93,9 +70,13 @@ export const Home = () => {
         })}
       </Tags>
       <PostsList>
-        {userPosts.map((post, index) => {
+        {posts.map((post, index) => {
           return (
-            <Posts key={index.toString()}>
+            <Posts
+              key={index.toString()}
+              id={post._id.toString()}
+              onClick={() => handleClick(post._id.toString())}
+            >
               <div>{post.title}</div>
               <PostCategories>
                 {post.categories &&
