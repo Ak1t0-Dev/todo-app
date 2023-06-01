@@ -37,9 +37,12 @@ export const Login = () => {
         "http://localhost:3001/api/auth/login",
         data
       );
-      console.log(response.data);
-      localStorage.setItem("accessToken", response.data.accessToken);
-      navigate("/home");
+      if (response.data.error) {
+        console.error("Error:", response.data.message);
+      } else {
+        localStorage.setItem("accessToken", response.data.accessToken);
+        navigate("/home");
+      }
     } catch (error: any) {
       console.error("Error:", error.response);
     }
