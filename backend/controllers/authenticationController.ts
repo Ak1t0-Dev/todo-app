@@ -37,18 +37,18 @@ export const loginUser = async (req: Request, res: Response) => {
   try {
     const user = await Users.findOne({ username }).lean();
     if (!user) {
-      res.json({
+      return res.json({
         error: true,
         message: "A user is not found!",
       });
     } else if (await bcrypt.compare(password, user.password)) {
       const accessToken = generateAccessToken(user);
-      res.json({ accessToken: accessToken });
+      return res.json({ accessToken: accessToken });
     } else {
-      res.json({ error: true, message: "Invalid credentials!" });
+      return res.json({ error: true, message: "Invalid credentials!" });
     }
   } catch (error: any) {
-    res.json({
+    return res.json({
       error: true,
       message: error.message,
     });
@@ -56,5 +56,7 @@ export const loginUser = async (req: Request, res: Response) => {
 };
 
 const generateAccessToken = (user: User) => {
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET!, { expiresIn: "2h" });
+  return jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET!, {
+    expiresIn: "2h",
+  });
 };

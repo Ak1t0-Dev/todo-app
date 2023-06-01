@@ -41,7 +41,7 @@ export const Login = () => {
       localStorage.setItem("accessToken", response.data.accessToken);
       navigate("/home");
     } catch (error: any) {
-      console.error("Error:", error.response.data);
+      console.error("Error:", error.response);
     }
   };
   return (
