@@ -9,6 +9,7 @@ export const Home = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [tags, setTags] = useState<Tag[]>([]);
 
+  const accessToken = localStorage.getItem("accessToken");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,16 +18,22 @@ export const Home = () => {
     getPosts();
   }, []);
 
-  const getPosts = () => {
-    axios
-      .get("http://localhost:3001/api/userposts")
-      .then((response) => {
+  const getPosts = async () => {
+    try {
+      const response = await axios.get("http://localhost:3001/api/userposts", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      if (response.status) {
         const data = response.data;
         setPosts(data);
-      })
-      .catch((err) => {
-        console.error("err:", err);
-      });
+      } else {
+        console.error("Error:", response.data);
+      }
+    } catch (error: any) {
+      console.error("Error:", error.response.data);
+    }
   };
 
   const getCategories = () => {

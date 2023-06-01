@@ -4,6 +4,7 @@ import {
   // getPostedBy,
   getIndividualPosts,
 } from "../controllers/postsController";
+import authMiddleware from "../middlewares/authMiddleware";
 
 const router: Router = express.Router();
 

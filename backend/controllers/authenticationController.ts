@@ -23,9 +23,9 @@ export const registerUser = async (req: Request, res: Response) => {
       address: address,
     };
     const createUser = await Users.create(userObject);
-    res.json(createUser);
+    return res.json(createUser);
   } catch (error: any) {
-    res.json({
+    return res.json({
       error: true,
       message: error.message,
     });
