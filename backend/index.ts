@@ -26,7 +26,8 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 db.once("open", () => console.error("connected to database"));
 
 app.use("/api/auth", authenticationRoute);
-app.use("/api", categoriesRoute, tagsRoute, usersRoute, postsRoute);
+app.use("/api", usersRoute, postsRoute);
+// app.use("/api", categoriesRoute, tagsRoute, usersRoute, postsRoute);
 
 app.listen(port, () => {
   console.log("server is running");

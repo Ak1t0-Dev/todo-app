@@ -6,6 +6,13 @@ const postsSchema = new Schema({
     type: String,
     required: true,
   },
+  content: {
+    type: String,
+  },
+  priority: {
+    type: ObjectId,
+    ref: "Priorities",
+  },
   tags: [
     {
       type: ObjectId,

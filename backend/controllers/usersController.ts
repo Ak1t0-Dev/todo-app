@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import Users from "../models/users";
 import { AuthRequest } from "../middlewares/authMiddleware";
+import Categories from "../models/categories";
+import Tags from "../models/tags";
+import Priorities from "../models/priorities";
 
 export const getUserPostsById = async (req: AuthRequest, res: Response) => {
   try {
@@ -8,9 +11,11 @@ export const getUserPostsById = async (req: AuthRequest, res: Response) => {
     const userPosts = await Users.findById(userId)
       .populate({
         path: "posts",
+
         populate: [
-          { path: "categories", model: "Categories" },
-          { path: "tags", model: "Tags" },
+          { path: "categories", model: Categories },
+          { path: "tags", model: Tags },
+          { path: "priority", model: Priorities },
         ],
       })
       .select("posts")
@@ -19,6 +24,7 @@ export const getUserPostsById = async (req: AuthRequest, res: Response) => {
       return res.status(404).json({ error: "User not found" });
     } else {
       const posts = userPosts.posts || [];
+      console.log(posts);
       return res.json(posts);
     }
   } catch (err) {

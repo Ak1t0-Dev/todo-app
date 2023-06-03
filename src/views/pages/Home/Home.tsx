@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { Category, Post, Tag } from "../../../types";
+import { Button } from "@mui/material";
 
 export const Home = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -13,8 +14,8 @@ export const Home = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    getCategories();
-    getTags();
+    // getCategories();
+    // getTags();
     getPosts();
   }, []);
 
@@ -66,6 +67,7 @@ export const Home = () => {
 
   return (
     <Main>
+      <Button variant="outlined">CREATE</Button>
       <Categories>
         {categories.map((item, index) => {
           return <Item key={index.toString()}>{item.category}</Item>;
@@ -84,6 +86,7 @@ export const Home = () => {
               id={post._id.toString()}
               onClick={() => handleClick(post._id.toString())}
             >
+              <div>{post.priority.name}</div>
               <div>{post.title}</div>
               <PostCategories>
                 {post.categories &&
