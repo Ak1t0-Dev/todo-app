@@ -11,8 +11,8 @@ import { useContext } from "react";
 import { Category } from "../../../types";
 
 interface Props {
-  selectedcategories: string[];
-  handleSelectedCategories: (categories: string[]) => void;
+  postCategories: string[];
+  handleCategories: (categories: string[]) => void;
 }
 
 const ITEM_HEIGHT = 48;
@@ -36,21 +36,17 @@ function getStyles(name: string, personName: readonly string[], theme: Theme) {
 }
 
 export default function CategoriesChip({
-  selectedcategories,
-  handleSelectedCategories,
+  postCategories,
+  handleCategories,
 }: Props) {
   const theme = useTheme();
   const categories = useContext<Category[]>(CategoriesContext);
 
-  const handleChange = (
-    event: SelectChangeEvent<typeof selectedcategories>
-  ) => {
+  const handleChange = (event: SelectChangeEvent<typeof postCategories>) => {
     const {
       target: { value },
     } = event;
-    handleSelectedCategories(
-      typeof value === "string" ? value.split(",") : value
-    );
+    handleCategories(typeof value === "string" ? value.split(",") : value);
   };
 
   return (
@@ -61,7 +57,7 @@ export default function CategoriesChip({
           labelId="demo-multiple-chip-label"
           id="demo-multiple-chip"
           multiple
-          value={selectedcategories}
+          value={postCategories}
           onChange={handleChange}
           input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
           renderValue={(selected) => (
@@ -80,7 +76,7 @@ export default function CategoriesChip({
             <MenuItem
               key={item._id.toString()}
               value={item._id.toString()}
-              style={getStyles(item.category, selectedcategories, theme)}
+              style={getStyles(item.category, postCategories, theme)}
             >
               {item.category}
             </MenuItem>

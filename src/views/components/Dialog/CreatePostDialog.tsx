@@ -13,6 +13,8 @@ import CategoriesChip from "../SelectBoxes/CategoriesChip";
 import { ChangeEvent, useState } from "react";
 import { Category } from "../../../types";
 import { SelectChangeEvent } from "@mui/material/Select";
+import { TextField } from "@mui/material";
+import axios from "axios";
 
 const BootstrapDialog = muistyled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -36,13 +38,6 @@ const Priority = styled.select`
 const Title = styled.input`
   width: 80%;
   font-size: 2rem;
-  border: none;
-  padding: 0.5rem 1rem;
-`;
-
-const Content = styled.textarea`
-  width: 80%;
-  font-size: 1rem;
   border: none;
   padding: 0.5rem 1rem;
 `;
@@ -73,11 +68,11 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
 
 export default function CustomizedDialogs() {
   const [postCategories, setPostCategories] = useState<string[]>([]);
-  const [selectedcategories, setSelectedcategories] = useState<string[]>([]);
   const [postTitle, setPostTitle] = useState("");
   const [postContent, setPostContent] = useState("");
   const [open, setOpen] = useState(false);
   const [priority, setPriority] = useState("");
+  const accessToken = localStorage.getItem("accessToken");
 
   const handlePriority = (event: SelectChangeEvent) => {
     setPriority(event.target.value);
@@ -87,8 +82,8 @@ export default function CustomizedDialogs() {
     setPostContent(event.target.value);
   };
 
-  const handleSelectedCategories = (value: string[]): void => {
-    setSelectedcategories(value);
+  const handleCategories = (value: string[]): void => {
+    setPostCategories(value);
   };
 
   const handleTitle = (event: ChangeEvent<HTMLInputElement>) => {
@@ -98,8 +93,38 @@ export default function CustomizedDialogs() {
   const handleClickOpen = () => {
     setOpen(true);
   };
+
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleSave = () => {
+    createPost();
+    setOpen(false);
+  };
+
+  const createPost = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3001/api/createpost",
+        {
+          title: postTitle,
+          categories: postCategories,
+          content: postContent,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      if (response.status) {
+      } else {
+        console.error("Error:", response.data);
+      }
+    } catch (error: any) {
+      console.error("Error:", error.response.data);
+    }
   };
 
   return (
@@ -121,13 +146,20 @@ export default function CustomizedDialogs() {
         <DialogContent dividers>
           <PriorityBox priority={priority} handlePriority={handlePriority} />
           <CategoriesChip
-            selectedcategories={selectedcategories}
-            handleSelectedCategories={handleSelectedCategories}
+            postCategories={postCategories}
+            handleCategories={handleCategories}
           />
-          <Content placeholder="content" onChange={handleContent} />
+          <TextField
+            id="outlined-multiline-static"
+            label="Content"
+            multiline
+            rows={4}
+            defaultValue="Default Value"
+            onChange={handleContent}
+          />
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleClose}>
+          <Button autoFocus onClick={handleSave}>
             Save
           </Button>
         </DialogActions>

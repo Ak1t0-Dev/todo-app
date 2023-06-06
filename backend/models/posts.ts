@@ -10,15 +10,8 @@ const postsSchema = new Schema({
     type: String,
   },
   priority: {
-    type: ObjectId,
-    ref: "Priorities",
+    type: String,
   },
-  tags: [
-    {
-      type: ObjectId,
-      ref: "Tags",
-    },
-  ],
   categories: [
     {
       type: ObjectId,

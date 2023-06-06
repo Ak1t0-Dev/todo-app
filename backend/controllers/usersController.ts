@@ -12,12 +12,7 @@ export const getUserData = async (req: AuthRequest, res: Response) => {
       .populate("categories")
       .populate({
         path: "posts",
-
-        populate: [
-          { path: "categories", model: Categories },
-          { path: "tags", model: Tags },
-          { path: "priority", model: Priorities },
-        ],
+        populate: [{ path: "categories", model: Categories }],
       })
       .select(["-_id", "categories", "posts"])
       .lean();
@@ -30,31 +25,3 @@ export const getUserData = async (req: AuthRequest, res: Response) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
-
-// export const getUserPostsById = async (req: AuthRequest, res: Response) => {
-//   try {
-//     const userId = req.user?._id?.toString();
-//     const userPosts = await Users.findById(userId)
-//       .populate("categories")
-//       .populate({
-//         path: "posts",
-
-//         populate: [
-//           { path: "categories", model: Categories },
-//           { path: "tags", model: Tags },
-//           { path: "priority", model: Priorities },
-//         ],
-//       })
-//       .select("posts")
-//       .lean();
-//     if (!userPosts) {
-//       return res.status(404).json({ error: "User not found" });
-//     } else {
-//       const posts = userPosts.posts || [];
-//       console.log(posts);
-//       return res.json(posts);
-//     }
-//   } catch (err) {
-//     return res.status(500).json({ error: "Internal Server Error" });
-//   }
-// };

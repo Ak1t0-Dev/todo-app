@@ -10,7 +10,6 @@ export const CategoriesContext = createContext<Category[]>([]);
 export const Home = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [tags, setTags] = useState<Tag[]>([]);
   const accessToken = localStorage.getItem("accessToken");
   const navigate = useNavigate();
 
@@ -51,18 +50,6 @@ export const Home = () => {
       });
   };
 
-  const getTags = () => {
-    axios
-      .get("http://localhost:3001/api/tags")
-      .then((response) => {
-        const data = response.data;
-        setTags(data);
-      })
-      .catch((err) => {
-        console.error("err:", err);
-      });
-  };
-
   const handleClick = (id: string) => {
     navigate(`/post/${id}`);
   };
@@ -76,11 +63,6 @@ export const Home = () => {
             return <Item key={index.toString()}>{item.category}</Item>;
           })}
         </Categories>
-        <Tags>
-          {tags.map((item, index) => {
-            return <Item key={index.toString()}>{item.tag}</Item>;
-          })}
-        </Tags>
         <PostsList>
           {posts.map((post, index) => {
             return (
@@ -89,20 +71,15 @@ export const Home = () => {
                 id={post._id.toString()}
                 onClick={() => handleClick(post._id.toString())}
               >
-                <div>{post.priority.name}</div>
+                <div>{post.priority}</div>
                 <div>{post.title}</div>
+                <div>{post.content}</div>
                 <PostCategories>
                   {post.categories &&
                     post.categories.map((item, index) => {
                       return <PostItem key={index}>{item.category}</PostItem>;
                     })}
                 </PostCategories>
-                <PostTags>
-                  {post.tags &&
-                    post.tags.map((item, index) => {
-                      return <PostItem key={index}>{item.tag}</PostItem>;
-                    })}
-                </PostTags>
               </Posts>
             );
           })}
