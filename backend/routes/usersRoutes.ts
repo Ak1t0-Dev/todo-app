@@ -1,12 +1,12 @@
 import express, { Router, Request, Response } from "express";
-import { getUserPostsById } from "../controllers/usersController";
+import { getUserData } from "../controllers/usersController";
 import authMiddleware, { AuthRequest } from "../middlewares/authMiddleware";
 
 const router: Router = express.Router();
 
-router.get("/userposts", authMiddleware, (req: AuthRequest, res: Response) => {
+router.get("/userdata", authMiddleware, (req: AuthRequest, res: Response) => {
   try {
-    getUserPostsById(req, res);
+    getUserData(req, res);
   } catch (error: any) {
     return res.status(500).json({ error: "Internal Server Error" });
   }

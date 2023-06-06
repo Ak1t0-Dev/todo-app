@@ -3,32 +3,32 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { Category, Post, Tag } from "../../../types";
-import { Button } from "@mui/material";
+import CreatePostDialog from "../../components/Dialog/CreatePostDialog";
 
 export const Home = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [tags, setTags] = useState<Tag[]>([]);
-
   const accessToken = localStorage.getItem("accessToken");
   const navigate = useNavigate();
 
   useEffect(() => {
     // getCategories();
     // getTags();
-    getPosts();
+    getUserData();
   }, []);
 
-  const getPosts = async () => {
+  const getUserData = async () => {
     try {
-      const response = await axios.get("http://localhost:3001/api/userposts", {
+      const response = await axios.get("http://localhost:3001/api/userdata", {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       });
       if (response.status) {
-        const data = response.data;
-        setPosts(data);
+        const { posts, categories } = response.data;
+        setPosts(posts);
+        setCategories(categories);
       } else {
         console.error("Error:", response.data);
       }
@@ -39,7 +39,7 @@ export const Home = () => {
 
   const getCategories = () => {
     axios
-      .get("http://localhost:3001/api/categories")
+      .get("http://localhost:3001/api/usercategories")
       .then((response) => {
         const data = response.data;
         setCategories(data);
@@ -67,7 +67,7 @@ export const Home = () => {
 
   return (
     <Main>
-      <Button variant="outlined">CREATE</Button>
+      <CreatePostDialog />
       <Categories>
         {categories.map((item, index) => {
           return <Item key={index.toString()}>{item.category}</Item>;

@@ -28,6 +28,12 @@ const usersSchema = new Schema({
       ref: "Posts",
     },
   ],
+  categories: [
+    {
+      type: ObjectId,
+      ref: "Categories",
+    },
+  ],
 });
 
 const Users = model("Users", usersSchema);
