@@ -1,9 +1,11 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { Category, Post, Tag } from "../../../types";
 import CreatePostDialog from "../../components/Dialog/CreatePostDialog";
+
+export const CategoriesContext = createContext<Category[]>([]);
 
 export const Home = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -67,43 +69,45 @@ export const Home = () => {
 
   return (
     <Main>
-      <CreatePostDialog />
-      <Categories>
-        {categories.map((item, index) => {
-          return <Item key={index.toString()}>{item.category}</Item>;
-        })}
-      </Categories>
-      <Tags>
-        {tags.map((item, index) => {
-          return <Item key={index.toString()}>{item.tag}</Item>;
-        })}
-      </Tags>
-      <PostsList>
-        {posts.map((post, index) => {
-          return (
-            <Posts
-              key={index.toString()}
-              id={post._id.toString()}
-              onClick={() => handleClick(post._id.toString())}
-            >
-              <div>{post.priority.name}</div>
-              <div>{post.title}</div>
-              <PostCategories>
-                {post.categories &&
-                  post.categories.map((item, index) => {
-                    return <PostItem key={index}>{item.category}</PostItem>;
-                  })}
-              </PostCategories>
-              <PostTags>
-                {post.tags &&
-                  post.tags.map((item, index) => {
-                    return <PostItem key={index}>{item.tag}</PostItem>;
-                  })}
-              </PostTags>
-            </Posts>
-          );
-        })}
-      </PostsList>
+      <CategoriesContext.Provider value={categories}>
+        <CreatePostDialog />
+        <Categories>
+          {categories.map((item, index) => {
+            return <Item key={index.toString()}>{item.category}</Item>;
+          })}
+        </Categories>
+        <Tags>
+          {tags.map((item, index) => {
+            return <Item key={index.toString()}>{item.tag}</Item>;
+          })}
+        </Tags>
+        <PostsList>
+          {posts.map((post, index) => {
+            return (
+              <Posts
+                key={index.toString()}
+                id={post._id.toString()}
+                onClick={() => handleClick(post._id.toString())}
+              >
+                <div>{post.priority.name}</div>
+                <div>{post.title}</div>
+                <PostCategories>
+                  {post.categories &&
+                    post.categories.map((item, index) => {
+                      return <PostItem key={index}>{item.category}</PostItem>;
+                    })}
+                </PostCategories>
+                <PostTags>
+                  {post.tags &&
+                    post.tags.map((item, index) => {
+                      return <PostItem key={index}>{item.tag}</PostItem>;
+                    })}
+                </PostTags>
+              </Posts>
+            );
+          })}
+        </PostsList>
+      </CategoriesContext.Provider>
     </Main>
   );
 };

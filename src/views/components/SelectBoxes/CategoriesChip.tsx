@@ -7,6 +7,9 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Chip from "@mui/material/Chip";
+import { CategoriesContext } from "../../pages/Home/Home";
+import { useContext } from "react";
+import { Category } from "../../../types";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -19,19 +22,6 @@ const MenuProps = {
   },
 };
 
-const names = [
-  "Oliver Hansen",
-  "Van Henry",
-  "April Tucker",
-  "Ralph Hubbard",
-  "Omar Alexander",
-  "Carlos Abbott",
-  "Miriam Wagner",
-  "Bradley Wilkerson",
-  "Virginia Andrews",
-  "Kelly Snyder",
-];
-
 function getStyles(name: string, personName: readonly string[], theme: Theme) {
   return {
     fontWeight:
@@ -43,13 +33,14 @@ function getStyles(name: string, personName: readonly string[], theme: Theme) {
 
 export default function CategoriesChip() {
   const theme = useTheme();
-  const [personName, setPersonName] = React.useState<string[]>([]);
+  const [categoryName, setCategoryName] = React.useState<string[]>([]);
+  const categories = useContext<Category[]>(CategoriesContext);
 
-  const handleChange = (event: SelectChangeEvent<typeof personName>) => {
+  const handleChange = (event: SelectChangeEvent<typeof categoryName>) => {
     const {
       target: { value },
     } = event;
-    setPersonName(
+    setCategoryName(
       // On autofill we get a stringified value.
       typeof value === "string" ? value.split(",") : value
     );
@@ -63,7 +54,7 @@ export default function CategoriesChip() {
           labelId="demo-multiple-chip-label"
           id="demo-multiple-chip"
           multiple
-          value={personName}
+          value={categoryName}
           onChange={handleChange}
           input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
           renderValue={(selected) => (
@@ -75,13 +66,13 @@ export default function CategoriesChip() {
           )}
           MenuProps={MenuProps}
         >
-          {names.map((name) => (
+          {categories.map((item) => (
             <MenuItem
-              key={name}
-              value={name}
-              style={getStyles(name, personName, theme)}
+              key={item._id.toString()}
+              value={item.category}
+              style={getStyles(item.category, categoryName, theme)}
             >
-              {name}
+              {item.category}
             </MenuItem>
           ))}
         </Select>
