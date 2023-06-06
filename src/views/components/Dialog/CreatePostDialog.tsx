@@ -10,6 +10,9 @@ import CloseIcon from "@mui/icons-material/Close";
 import styled from "styled-components";
 import PriorityBox from "../SelectBoxes/PriorityBox";
 import CategoriesChip from "../SelectBoxes/CategoriesChip";
+import { ChangeEvent, useState } from "react";
+import { Category } from "../../../types";
+import { SelectChangeEvent } from "@mui/material/Select";
 
 const BootstrapDialog = muistyled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -69,7 +72,28 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
 };
 
 export default function CustomizedDialogs() {
-  const [open, setOpen] = React.useState(false);
+  const [postCategories, setPostCategories] = useState<string[]>([]);
+  const [selectedcategories, setSelectedcategories] = useState<string[]>([]);
+  const [postTitle, setPostTitle] = useState("");
+  const [postContent, setPostContent] = useState("");
+  const [open, setOpen] = useState(false);
+  const [priority, setPriority] = useState("");
+
+  const handlePriority = (event: SelectChangeEvent) => {
+    setPriority(event.target.value);
+  };
+
+  const handleContent = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    setPostContent(event.target.value);
+  };
+
+  const handleSelectedCategories = (value: string[]): void => {
+    setSelectedcategories(value);
+  };
+
+  const handleTitle = (event: ChangeEvent<HTMLInputElement>) => {
+    setPostTitle(event.target.value);
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -92,16 +116,19 @@ export default function CustomizedDialogs() {
           id="customized-dialog-title"
           onClose={handleClose}
         >
-          <Title placeholder="title" />
+          <Title placeholder="title" onChange={handleTitle} />
         </BootstrapDialogTitle>
         <DialogContent dividers>
-          <PriorityBox />
-          <CategoriesChip />
-          <Content placeholder="content" />
+          <PriorityBox priority={priority} handlePriority={handlePriority} />
+          <CategoriesChip
+            selectedcategories={selectedcategories}
+            handleSelectedCategories={handleSelectedCategories}
+          />
+          <Content placeholder="content" onChange={handleContent} />
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleClose}>
-            Save changes
+            Save
           </Button>
         </DialogActions>
       </BootstrapDialog>

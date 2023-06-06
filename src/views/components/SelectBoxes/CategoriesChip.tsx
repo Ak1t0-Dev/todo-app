@@ -1,4 +1,3 @@
-import * as React from "react";
 import { Theme, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import OutlinedInput from "@mui/material/OutlinedInput";
@@ -10,6 +9,11 @@ import Chip from "@mui/material/Chip";
 import { CategoriesContext } from "../../pages/Home/Home";
 import { useContext } from "react";
 import { Category } from "../../../types";
+
+interface Props {
+  selectedcategories: string[];
+  handleSelectedCategories: (categories: string[]) => void;
+}
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -31,17 +35,20 @@ function getStyles(name: string, personName: readonly string[], theme: Theme) {
   };
 }
 
-export default function CategoriesChip() {
+export default function CategoriesChip({
+  selectedcategories,
+  handleSelectedCategories,
+}: Props) {
   const theme = useTheme();
-  const [categoryName, setCategoryName] = React.useState<string[]>([]);
   const categories = useContext<Category[]>(CategoriesContext);
 
-  const handleChange = (event: SelectChangeEvent<typeof categoryName>) => {
+  const handleChange = (
+    event: SelectChangeEvent<typeof selectedcategories>
+  ) => {
     const {
       target: { value },
     } = event;
-    setCategoryName(
-      // On autofill we get a stringified value.
+    handleSelectedCategories(
       typeof value === "string" ? value.split(",") : value
     );
   };
@@ -54,14 +61,17 @@ export default function CategoriesChip() {
           labelId="demo-multiple-chip-label"
           id="demo-multiple-chip"
           multiple
-          value={categoryName}
+          value={selectedcategories}
           onChange={handleChange}
           input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
           renderValue={(selected) => (
             <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-              {selected.map((value) => (
-                <Chip key={value} label={value} />
-              ))}
+              {selected.map((value) => {
+                const category = categories.find(
+                  (item) => item._id.toString() === value
+                );
+                return <Chip key={value} label={category?.category} />;
+              })}
             </Box>
           )}
           MenuProps={MenuProps}
@@ -69,8 +79,8 @@ export default function CategoriesChip() {
           {categories.map((item) => (
             <MenuItem
               key={item._id.toString()}
-              value={item.category}
-              style={getStyles(item.category, categoryName, theme)}
+              value={item._id.toString()}
+              style={getStyles(item.category, selectedcategories, theme)}
             >
               {item.category}
             </MenuItem>

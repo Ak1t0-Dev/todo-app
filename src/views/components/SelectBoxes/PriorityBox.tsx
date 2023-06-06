@@ -5,9 +5,12 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useState } from "react";
 
-export default function PriorityBox() {
-  const [priority, setPriority] = useState("");
+interface Props {
+  priority: string;
+  handlePriority: (event: SelectChangeEvent) => void;
+}
 
+export default function PriorityBox({ priority, handlePriority }: Props) {
   const prioritiesList = [
     {
       name: "low",
@@ -20,10 +23,6 @@ export default function PriorityBox() {
     },
   ];
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setPriority(event.target.value);
-  };
-
   return (
     <div>
       <FormControl sx={{ m: 1, minWidth: 120 }}>
@@ -33,11 +32,11 @@ export default function PriorityBox() {
           id="demo-simple-select-helper"
           value={priority}
           label="Age"
-          onChange={handleChange}
+          onChange={handlePriority}
         >
           <MenuItem value="">none</MenuItem>
           {prioritiesList.map((item, index) => (
-            <MenuItem key={index} value={index}>
+            <MenuItem key={index} value={item.name}>
               {item.name}
             </MenuItem>
           ))}
