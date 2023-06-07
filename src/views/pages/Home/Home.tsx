@@ -7,6 +7,32 @@ import CreatePostDialog from "../../components/Dialog/CreatePostDialog";
 
 export const CategoriesContext = createContext<Category[]>([]);
 
+const getPriorityStyles = (priority: string) => {
+  const colors = {
+    low: {
+      borderColor: "#86C166",
+      textColor: "#86C166",
+      backgroundColor: "#D5FFD6",
+    },
+    middle: {
+      borderColor: "#F7C242",
+      textColor: "#F7C242",
+      backgroundColor: "#FFE7C1",
+    },
+    high: {
+      borderColor: "#CB1B45",
+      textColor: "#CB1B45",
+      backgroundColor: "#FFD9DF",
+    },
+    default: {
+      borderColor: "#3A8FB7",
+      textColor: "#3A8FB7",
+      backgroundColor: "#E0F2FD",
+    },
+  };
+  return colors[priority as keyof typeof colors] || colors.default;
+};
+
 export const Home = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -69,11 +95,12 @@ export const Home = () => {
           {posts.map((post, index) => {
             return (
               <Posts
+                priority={post.priority}
                 key={index.toString()}
                 id={post._id.toString()}
                 onClick={() => handleClick(post._id.toString())}
               >
-                <Priority>{post.priority}</Priority>
+                <Priority priority={post.priority}>{post.priority}</Priority>
                 <PostTitle>{post.title}</PostTitle>
                 <PostContent>{post.content}</PostContent>
                 <PostCategories>
@@ -103,17 +130,33 @@ const PostsList = styled.div`
   margin-top: 1rem;
 `;
 
-const Posts = styled.div`
+const Posts = styled.div<{ priority: string }>`
   border: 3px solid black;
   width: 300px;
   padding: 1rem;
+  ${({ priority }) => {
+    const { borderColor } = getPriorityStyles(priority);
+    return `
+      border-color: ${borderColor};
+    `;
+  }};
 `;
 
-const Priority = styled.span`
+const Priority = styled.span<{ priority: string }>`
   border: 1px solid black;
   border-radius: 1rem;
   padding: 0.3rem 0.5rem;
   font-size: 0.7rem;
+  font-weight: 800;
+  ${({ priority }) => {
+    const { borderColor, backgroundColor, textColor } =
+      getPriorityStyles(priority);
+    return `
+      border-color: ${borderColor};
+      background-color: ${backgroundColor};
+      color: ${textColor};
+    `;
+  }};
 `;
 
 // const Categories = styled.div`
