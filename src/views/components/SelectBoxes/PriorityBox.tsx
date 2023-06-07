@@ -1,16 +1,14 @@
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import FormHelperText from "@mui/material/FormHelperText";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { useState } from "react";
 
 interface Props {
-  priority: string;
+  postPriority: string;
   handlePriority: (event: SelectChangeEvent) => void;
 }
 
-export default function PriorityBox({ priority, handlePriority }: Props) {
+export default function PriorityBox({ postPriority, handlePriority }: Props) {
   const prioritiesList = [
     {
       name: "low",
@@ -30,8 +28,8 @@ export default function PriorityBox({ priority, handlePriority }: Props) {
         <Select
           labelId="demo-simple-select-helper-label"
           id="demo-simple-select-helper"
-          value={priority}
-          label="Age"
+          value={postPriority}
+          label="Priority"
           onChange={handlePriority}
         >
           <MenuItem value="">none</MenuItem>

@@ -2,6 +2,10 @@ import { Schema, model } from "mongoose";
 import { ObjectId } from "mongodb";
 
 const usersSchema = new Schema({
+  _id: {
+    type: ObjectId,
+    auto: true,
+  },
   username: {
     type: String,
     required: true,

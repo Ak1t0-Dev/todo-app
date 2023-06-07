@@ -11,7 +11,6 @@ import styled from "styled-components";
 import PriorityBox from "../SelectBoxes/PriorityBox";
 import CategoriesChip from "../SelectBoxes/CategoriesChip";
 import { ChangeEvent, useState } from "react";
-import { Category } from "../../../types";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { TextField } from "@mui/material";
 import axios from "axios";
@@ -31,9 +30,9 @@ export interface DialogTitleProps {
   onClose: () => void;
 }
 
-const Priority = styled.select`
-  font-size: 1rem;
-`;
+export interface Props {
+  handlePostChanged: () => void;
+}
 
 const Title = styled.input`
   width: 80%;
@@ -66,16 +65,16 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
   );
 };
 
-export default function CustomizedDialogs() {
+export default function CustomizedDialogs({ handlePostChanged }: Props) {
   const [postCategories, setPostCategories] = useState<string[]>([]);
   const [postTitle, setPostTitle] = useState("");
   const [postContent, setPostContent] = useState("");
+  const [postPriority, setPostPriority] = useState("");
   const [open, setOpen] = useState(false);
-  const [priority, setPriority] = useState("");
   const accessToken = localStorage.getItem("accessToken");
 
   const handlePriority = (event: SelectChangeEvent) => {
-    setPriority(event.target.value);
+    setPostPriority(event.target.value);
   };
 
   const handleContent = (event: ChangeEvent<HTMLTextAreaElement>) => {
@@ -98,17 +97,25 @@ export default function CustomizedDialogs() {
     setOpen(false);
   };
 
-  const handleSave = () => {
-    createPost();
+  const handleSave = async () => {
+    const resultCreatePost = await createPost();
+    if (resultCreatePost) {
+      handlePostChanged();
+    }
+    setPostCategories([]);
+    setPostTitle("");
+    setPostContent("");
+    setPostPriority("");
     setOpen(false);
   };
 
-  const createPost = async () => {
+  const createPost = async (): Promise<Boolean> => {
     try {
       const response = await axios.post(
         "http://localhost:3001/api/createpost",
         {
           title: postTitle,
+          priority: postPriority,
           categories: postCategories,
           content: postContent,
         },
@@ -119,11 +126,14 @@ export default function CustomizedDialogs() {
         }
       );
       if (response.status) {
+        return true;
       } else {
         console.error("Error:", response.data);
+        return false;
       }
     } catch (error: any) {
       console.error("Error:", error.response.data);
+      return false;
     }
   };
 
@@ -144,7 +154,10 @@ export default function CustomizedDialogs() {
           <Title placeholder="title" onChange={handleTitle} />
         </BootstrapDialogTitle>
         <DialogContent dividers>
-          <PriorityBox priority={priority} handlePriority={handlePriority} />
+          <PriorityBox
+            postPriority={postPriority}
+            handlePriority={handlePriority}
+          />
           <CategoriesChip
             postCategories={postCategories}
             handleCategories={handleCategories}

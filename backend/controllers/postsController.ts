@@ -1,27 +1,30 @@
 import { Request, Response } from "express";
 import Posts from "../models/posts";
+import Users from "../models/users";
+import { AuthRequest } from "../middlewares/authMiddleware";
 
-export const postPosts = async (req: Request, res: Response) => {
+export const createPost = async (req: AuthRequest, res: Response) => {
   try {
+    const userId = req.user?._id;
+    const { title, content, priority, categories } = req.body;
+    console.log(userId, title, content, priority, categories);
     const newPost = new Posts({
-      title: req.body.title,
-      content: req.body.content,
-      priority: req.body.priority,
-      categories: req.body.categories,
+      title: title,
+      content: content,
+      priority: priority,
+      categories: categories,
     });
     const result = await newPost.save();
+    console.log(result);
+    await Users.findByIdAndUpdate(userId, { $push: { posts: result._id } });
     return res.json(result);
   } catch (error: any) {
+    console.log(error);
     return res.json({
       error: true,
       message: error.message,
     });
   }
-};
-
-export const creatPost = async (req: Request, res: Response) => {
-  const postsList = await Posts.find().populate("tags").populate("categories");
-  return res.json(postsList);
 };
 
 export const getIndividualPosts = async (req: Request, res: Response) => {
