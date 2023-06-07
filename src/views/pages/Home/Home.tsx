@@ -86,30 +86,27 @@ export const Home = () => {
     <Main>
       <CategoriesContext.Provider value={categories}>
         <CreatePostDialog handlePostChanged={handlePostChanged} />
-        {/* <Categories>
-          {categories.map((item, index) => {
-            return <Item key={index.toString()}>{item.category}</Item>;
-          })}
-        </Categories> */}
         <PostsList>
           {posts.map((post, index) => {
             return (
-              <Posts
+              <PostItem
                 priority={post.priority}
                 key={index.toString()}
                 id={post._id.toString()}
                 onClick={() => handleClick(post._id.toString())}
               >
                 <Priority priority={post.priority}>{post.priority}</Priority>
-                <PostTitle>{post.title}</PostTitle>
+                <PostTitle priority={post.priority}>{post.title}</PostTitle>
                 <PostContent>{post.content}</PostContent>
                 <PostCategories>
                   {post.categories &&
                     post.categories.map((item, index) => {
-                      return <PostItem key={index}>{item.category}</PostItem>;
+                      return (
+                        <PostCategory key={index}>{item.category}</PostCategory>
+                      );
                     })}
                 </PostCategories>
-              </Posts>
+              </PostItem>
             );
           })}
         </PostsList>
@@ -130,20 +127,19 @@ const PostsList = styled.div`
   margin-top: 1rem;
 `;
 
-const Posts = styled.div<{ priority: string }>`
-  border: 3px solid black;
+const PostItem = styled.div<{ priority: string }>`
+  border-radius: 0.4rem;
   width: 300px;
   padding: 1rem;
   ${({ priority }) => {
     const { borderColor } = getPriorityStyles(priority);
     return `
-      border-color: ${borderColor};
+      border: 3px solid ${borderColor};
     `;
-  }};
+  }}
 `;
 
 const Priority = styled.span<{ priority: string }>`
-  border: 1px solid black;
   border-radius: 1rem;
   padding: 0.3rem 0.5rem;
   font-size: 0.7rem;
@@ -151,32 +147,28 @@ const Priority = styled.span<{ priority: string }>`
   ${({ priority }) => {
     const { borderColor, backgroundColor, textColor } =
       getPriorityStyles(priority);
-    return `
-      border-color: ${borderColor};
+    return `  
+      border: 1px solid ${borderColor};
       background-color: ${backgroundColor};
       color: ${textColor};
     `;
-  }};
+  }}
+  ${({ priority }) =>
+    priority === "" &&
+    `
+    visibility: hidden;
+  `}
 `;
 
-// const Categories = styled.div`
-//   display: flex;
-//   flex-direction: row;
-//   justify-content: flex-start;
-//   gap: 0.3rem;
-//   border: 3px solid black;
-//   padding: 1rem;
-//   margin: 1rem 0;
-// `;
-
-// const Item = styled.span`
-//   border: 1px solid black;
-//   border-radius: 1rem;
-//   padding: 0.3rem 0.5rem;
-//   font-size: 1rem;
-// `;
-
-const PostTitle = styled.h3``;
+const PostTitle = styled.h3<{ priority: string }>`
+  padding-bottom: 0.5rem;
+  ${({ priority }) => {
+    const { borderColor } = getPriorityStyles(priority);
+    return `
+      border-bottom: 1px solid ${borderColor};
+    `;
+  }}
+`;
 
 const PostContent = styled.div`
   height: 100px;
@@ -191,16 +183,8 @@ const PostCategories = styled.div`
   padding: 0.3rem;
 `;
 
-// const PostTags = styled.div`
-//   display: flex;
-//   flex-direction: row;
-//   justify-content: flex-start;
-//   gap: 0.3rem;
-//   padding: 0.3rem;
-// `;
-
-const PostItem = styled.span`
-  border: 1px solid black;
+const PostCategory = styled.span`
+  border: 2px solid black;
   border-radius: 1rem;
   padding: 0.3rem 0.5rem;
   font-size: 0.5rem;

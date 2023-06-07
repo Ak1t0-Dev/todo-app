@@ -1,13 +1,12 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
-import { styled as muistyled } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import styled from "styled-components";
 import PriorityBox from "../SelectBoxes/PriorityBox";
 import CategoriesChip from "../SelectBoxes/CategoriesChip";
 import { ChangeEvent, useState } from "react";
@@ -15,7 +14,7 @@ import { SelectChangeEvent } from "@mui/material/Select";
 import { TextField } from "@mui/material";
 import axios from "axios";
 
-const BootstrapDialog = muistyled(Dialog)(({ theme }) => ({
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
   },
@@ -34,18 +33,11 @@ export interface Props {
   handlePostChanged: () => void;
 }
 
-const Title = styled.input`
-  width: 80%;
-  font-size: 2rem;
-  border: none;
-  padding: 0.5rem 1rem;
-`;
-
 const BootstrapDialogTitle = (props: DialogTitleProps) => {
   const { children, onClose, ...other } = props;
 
   return (
-    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+    <DialogTitle sx={{ m: 1, px: 3, py: 1, color: "#666666" }} {...other}>
       {children}
       {onClose ? (
         <IconButton
@@ -54,7 +46,7 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
           sx={{
             position: "absolute",
             right: 10,
-            top: 20,
+            top: 10,
             color: (theme) => theme.palette.grey[500],
           }}
         >
@@ -140,20 +132,69 @@ export default function CustomizedDialogs({ handlePostChanged }: Props) {
   return (
     <div>
       <Button variant="outlined" onClick={handleClickOpen}>
-        CREATE
+        CREAT TASK
       </Button>
       <BootstrapDialog
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"
         open={open}
+        PaperProps={{ sx: { minWidth: 500, width: "50%" } }}
       >
         <BootstrapDialogTitle
           id="customized-dialog-title"
           onClose={handleClose}
         >
-          <Title placeholder="title" onChange={handleTitle} />
+          NEW TASK
         </BootstrapDialogTitle>
-        <DialogContent dividers>
+        <DialogContent
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 3,
+            mx: 3,
+          }}
+          dividers
+        >
+          <TextField
+            id="standard-basic"
+            label="Title"
+            variant="standard"
+            onChange={handleTitle}
+            sx={{ width: 1 / 1 }}
+            InputLabelProps={{
+              sx: {
+                color: "#666666",
+                paddingLeft: "0.5rem",
+                fontSize: "1.2rem",
+              },
+            }}
+            InputProps={{
+              sx: {
+                paddingX: "0.5rem",
+                fontSize: "1.5rem",
+              },
+            }}
+          />
+          <TextField
+            id="outlined-multiline-static"
+            label="Content"
+            multiline
+            rows={4}
+            InputLabelProps={{
+              sx: {
+                color: "#666666",
+                fontSize: "1rem",
+              },
+            }}
+            InputProps={{
+              sx: {
+                paddingX: "0.5rem",
+                fontSize: "1rem",
+              },
+            }}
+            onChange={handleContent}
+            sx={{ width: 1 / 1 }}
+          />
           <PriorityBox
             postPriority={postPriority}
             handlePriority={handlePriority}
@@ -162,17 +203,9 @@ export default function CustomizedDialogs({ handlePostChanged }: Props) {
             postCategories={postCategories}
             handleCategories={handleCategories}
           />
-          <TextField
-            id="outlined-multiline-static"
-            label="Content"
-            multiline
-            rows={4}
-            defaultValue="Default Value"
-            onChange={handleContent}
-          />
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleSave}>
+          <Button autoFocus sx={{ fontSize: 16 }} onClick={handleSave}>
             Save
           </Button>
         </DialogActions>

@@ -23,8 +23,8 @@ export default function PriorityBox({ postPriority, handlePriority }: Props) {
 
   return (
     <div>
-      <FormControl sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel id="demo-simple-select-helper-label">priority</InputLabel>
+      <FormControl sx={{ width: 1 / 4 }}>
+        <InputLabel id="demo-simple-select-helper-label">Priority</InputLabel>
         <Select
           labelId="demo-simple-select-helper-label"
           id="demo-simple-select-helper"
