@@ -1,5 +1,4 @@
 import "./App.css";
-import Header from "./views/components/Header/Header";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Login } from "./views/pages/Login/Login";
 import { Register } from "./views/pages/Register/Register";
