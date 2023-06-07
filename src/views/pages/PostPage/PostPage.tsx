@@ -31,18 +31,13 @@ export const PostPage = () => {
   return (
     <Posts id={post._id.toString()}>
       <div>{post.title}</div>
+      <div>{post.content}</div>
       <PostCategories>
         {post.categories &&
           post.categories.map((item, index) => {
             return <PostItem key={index}>{item.category}</PostItem>;
           })}
       </PostCategories>
-      <PostTags>
-        {post.tags &&
-          post.tags.map((item, index) => {
-            return <PostItem key={index}>{item.tag}</PostItem>;
-          })}
-      </PostTags>
     </Posts>
   );
 };
@@ -54,14 +49,6 @@ const Posts = styled.div`
 `;
 
 const PostCategories = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  gap: 0.3rem;
-  padding: 0.3rem;
-`;
-
-const PostTags = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;

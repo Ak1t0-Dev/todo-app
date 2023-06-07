@@ -6,12 +6,12 @@ const postsSchema = new Schema({
     type: String,
     required: true,
   },
-  tags: [
-    {
-      type: ObjectId,
-      ref: "Tags",
-    },
-  ],
+  content: {
+    type: String,
+  },
+  priority: {
+    type: String,
+  },
   categories: [
     {
       type: ObjectId,

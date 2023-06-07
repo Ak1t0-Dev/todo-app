@@ -1,6 +1,19 @@
 import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { User } from "../types";
+import { ObjectId } from "mongoose";
+
+export interface User {
+  _id: ObjectId;
+  username: string;
+  password: string;
+  firstname: string;
+  lastname: string;
+  address: string;
+  categories: [];
+  posts: [];
+  iat: number;
+  exp: number;
+}
 
 export interface AuthRequest extends Request {
   // user: JwtPayload;
@@ -30,11 +43,6 @@ const authMiddleware = (
     }
 
     req.user = decoded.user;
-
-    console.log(
-      "decodeduserdecodeduserdecodeduserdecodeduserdecodeduserdecodeduser",
-      decoded.user
-    );
 
     return next();
   } catch (error) {

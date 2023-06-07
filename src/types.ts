@@ -3,8 +3,9 @@ import { ObjectId } from "mongoose";
 export interface Post {
   _id: ObjectId;
   title: string;
+  priority: string;
+  content: string;
   categories: Category[];
-  tags: Tag[];
 }
 
 export interface Category {
