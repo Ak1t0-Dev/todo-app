@@ -4,34 +4,9 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { Category, Post } from "../../../types";
 import CreatePostDialog from "../../components/Dialog/CreatePostDialog";
+import { getPriorityStyles } from "../../../constants/themes/Theme";
 
 export const CategoriesContext = createContext<Category[]>([]);
-
-const getPriorityStyles = (priority: string) => {
-  const colors = {
-    low: {
-      borderColor: "#86C166",
-      textColor: "#86C166",
-      backgroundColor: "#D5FFD6",
-    },
-    middle: {
-      borderColor: "#F7C242",
-      textColor: "#F7C242",
-      backgroundColor: "#FFE7C1",
-    },
-    high: {
-      borderColor: "#CB1B45",
-      textColor: "#CB1B45",
-      backgroundColor: "#FFD9DF",
-    },
-    default: {
-      borderColor: "#3A8FB7",
-      textColor: "#3A8FB7",
-      backgroundColor: "#E0F2FD",
-    },
-  };
-  return colors[priority as keyof typeof colors] || colors.default;
-};
 
 export const Home = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -184,8 +159,9 @@ const PostCategories = styled.div`
 `;
 
 const PostCategory = styled.span`
-  border: 2px solid black;
+  border: 1.5px solid grey;
   border-radius: 1rem;
   padding: 0.3rem 0.5rem;
   font-size: 0.5rem;
+  color: #606060;
 `;
